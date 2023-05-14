@@ -18,6 +18,8 @@ Just do "docker-compose up -d" in the main folder of the container. First launch
 # Stop the container
 To stop the container without issues you should stop the mangosd container first and let it close itself, it does take a while because it has to disconnect all bots and backup everything. Don't force kill the container or you will probably get a rollback on your progress. After mangosd has closed you can close the database and realmd containers
 
+You can edit the timeout for the docker compose to stop in the docker-compose.yml file changing the stop_grace_period, in case your container gets stuck
+
 # Reinstall the container
 To make a fresh install of the container you should remove the ".initialized" file in the config file and remove all the containers from docker. After that you can do the "docker-compose up -d" to restart it
 
