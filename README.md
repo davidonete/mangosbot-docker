@@ -15,7 +15,7 @@ You can place all your custom sql on the sql/custom folder and it will get execu
 Server backups will be done at server shutdown automatically and placed in the backup folder. Please let the server stop gracefully to avoid rollbacks and other nasty stuff. It does take a while, just go get a coffee.
 
 # Start the container
-Just do "docker-compose up -d" in the main folder of the container. First launch will get a very long time as the docker needs to build the code and initialize the database.
+Just do "docker-compose up -d" in the main folder of the container. First launch will take a very long time as the docker needs to build the code and initialize the database.
 
 # Stop the container
 To stop the container without issues you should stop the mangosd container first and let it close itself, it does take a while because it has to disconnect all bots and backup everything. Don't force kill the container or you will probably get a rollback on your progress. After mangosd has closed you can close the database and realmd containers
