@@ -6,6 +6,8 @@ To generate the docker image you just need to download this repository and set u
 ## Set up the Mangosd Data
 You will need to generate or download the vmaps, mmaps, etc...  and place it in the data folder
 
+https://mega.nz/folder/mRk3DCoZ#2nkNx9NlayG0Lj9Un8dsYA
+
 ## Custom sql
 You can place all your custom sql on the sql/custom folder and it will get executed at the initialization state in alphabetical order. Keep in mind it needs to be placed into the world/realms/playerbots folder depending on what the sql is editing
 
