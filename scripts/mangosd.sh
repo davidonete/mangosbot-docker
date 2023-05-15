@@ -193,7 +193,7 @@ function initialize_database
 	fi
 	
 	# Copy install script
-	cp -v /opt/cmangos/scripts/InstallFullDB.config /tmp/db/InstallFullDB.config
+	cp -v /opt/cmangos/etc/InstallFullDB.config /tmp/db/InstallFullDB.config
 	chmod 777 /tmp/db/InstallFullDB.config
 	cp -vrf /opt/cmangos/scripts/InstallFullDB.sh /tmp/db/InstallFullDB.sh
 	chmod 777 /tmp/db/InstallFullDB.sh
@@ -474,7 +474,7 @@ function start
 			rm /tmp/mangosd_input_pipe
 			mkfifo /tmp/mangosd_input_pipe
 			
-			./mangosd < /tmp/mangosd_input_pipe &
+			gdb -x /opt/cmangos/etc/gdb.conf --batch ./mangosd < /tmp/mangosd_input_pipe &
 			
 			# Save the process PID
 			PROCESS_PID=$!
@@ -510,8 +510,6 @@ if [ $# -lt 1 ]; then
 fi
 
 action=$1
-
-echo $action
 
 case $action in
     "start")

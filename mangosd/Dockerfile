@@ -99,7 +99,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     zlibc \
 	git-core \
 	ca-certificates \
-	mariadb-client && \
+	mariadb-client \
+	gdb && \
     rm -rf /var/lib/apt/lists/*
 
 # Debugging tools
