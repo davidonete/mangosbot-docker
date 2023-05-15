@@ -279,6 +279,12 @@ function initialize
 	else
 	    echo "Initializing mangosd server...";
 
+		# Move binaries to correct folder
+		if [ -d "/opt/cmangos/bin2" ]; then
+			mv -f /opt/cmangos/bin2/* /opt/cmangos/bin
+			rm -rf /opt/cmangos/bin2
+		fi
+
 		if ! initialize_database; then
 			return 1
 		fi

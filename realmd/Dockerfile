@@ -98,6 +98,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 
 # Copy over data
 COPY --from=builder /opt/cmangos /opt/cmangos
+RUN mv /opt/cmangos/bin /opt/cmangos/bin2
 
 # Fetch build arguments
 ARG CORE_COMMIT_HASH=HEAD \

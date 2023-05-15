@@ -97,21 +97,17 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     unrar-free \
     unzip \
     zlibc \
+	openssh-server \
+	curl \
 	git-core \
 	ca-certificates \
 	mariadb-client \
 	gdb && \
     rm -rf /var/lib/apt/lists/*
 
-# Debugging tools
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -q -y \
-	openssh-server \
-	curl && \
-    rm -rf /var/lib/apt/lists/*
-
 # Copy over data
 COPY --from=builder /opt/cmangos /opt/cmangos
+RUN mv /opt/cmangos/bin /opt/cmangos/bin2
 
 # Volume configuration
 VOLUME ["/opt/cmangos/etc"]
