@@ -4,6 +4,12 @@ PROCESS_PID=0
 
 function initialize 
 {
+	# Move binaries to correct folder
+	if [ -d "/opt/cmangos/bin2" ]; then
+		mv -f /opt/cmangos/bin2/* /opt/cmangos/bin
+		rm -rf /opt/cmangos/bin2
+	fi
+
 	return 0
 }
 
