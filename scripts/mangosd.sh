@@ -144,19 +144,19 @@ function initialize_database
 	echo "Initializing mangosd database..."
 	
 	echo "Creating databases..."
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "create database ${CHARACTERS_DB};"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "create database ${LOGS_DB};"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "create database ${MANGOSD_DB};"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "create database ${REALMD_DB};"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "create database ${PLAYERBOTS_DB};"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "create database ${CHARACTERS_DB};"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "create database ${LOGS_DB};"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "create database ${MANGOSD_DB};"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "create database ${REALMD_DB};"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "create database ${PLAYERBOTS_DB};"
 	
 	echo "Creating database user..."
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "create user '${DB_USER}'@'%' identified by '${DB_PASS}';"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "grant all privileges on ${CHARACTERS_DB}.* to '${DB_USER}'@'%';"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "grant all privileges on ${LOGS_DB}.* to '${DB_USER}'@'%';"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "grant all privileges on ${MANGOSD_DB}.* to '${DB_USER}'@'%';"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "grant all privileges on ${REALMD_DB}.* to '${DB_USER}'@'%';"
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} -e "grant all privileges on ${PLAYERBOTS_DB}.* to '${DB_USER}'@'%';"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "create user '${DB_USER}'@'%' identified by '${DB_PASS}';"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "grant all privileges on ${CHARACTERS_DB}.* to '${DB_USER}'@'%';"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "grant all privileges on ${LOGS_DB}.* to '${DB_USER}'@'%';"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "grant all privileges on ${MANGOSD_DB}.* to '${DB_USER}'@'%';"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "grant all privileges on ${REALMD_DB}.* to '${DB_USER}'@'%';"
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} -e "grant all privileges on ${PLAYERBOTS_DB}.* to '${DB_USER}'@'%';"
 	
 	# Get latest version
 	echo "Getting latest cmangos core from https://github.com/celguar/mangos-classic.git --branch ike3-bots..."
@@ -169,27 +169,27 @@ function initialize_database
 	# Create default database structures
 	echo "Create base Characters database"
 	if [ -f /tmp/cmangos/sql/base/characters.sql ]; then
-		mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${CHARACTERS_DB} < /tmp/cmangos/sql/base/characters.sql
+		mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${CHARACTERS_DB} < /tmp/cmangos/sql/base/characters.sql
 	fi
 
 	echo "Create base Logs database"
 	if [ -f /tmp/cmangos/sql/base/logs.sql ]; then
-		mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${LOGS_DB} < /tmp/cmangos/sql/base/logs.sql
+		mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${LOGS_DB} < /tmp/cmangos/sql/base/logs.sql
 	fi
 
 	echo "Create base World database"
 	if [ -f /tmp/cmangos/sql/base/mangos.sql ]; then
-		mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${MANGOSD_DB} < /tmp/cmangos/sql/base/mangos.sql
+		mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${MANGOSD_DB} < /tmp/cmangos/sql/base/mangos.sql
 	fi
 
 	echo "Create base Realmd database"
 	if [ -f /tmp/cmangos/sql/base/realmd.sql ]; then
-		mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${REALMD_DB} < /tmp/cmangos/sql/base/realmd.sql
+		mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${REALMD_DB} < /tmp/cmangos/sql/base/realmd.sql
 	fi
 
 	echo "Create base Playerbots database"
 	if [ -f /tmp/cmangos/src/modules/Bots/sql/playerbot/playerbot.sql ]; then
-		mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${PLAYERBOTS_DB} < /tmp/cmangos/src/modules/Bots/sql/playerbot/playerbot.sql
+		mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${PLAYERBOTS_DB} < /tmp/cmangos/src/modules/Bots/sql/playerbot/playerbot.sql
 	fi
 	
 	# Copy install script
@@ -199,13 +199,10 @@ function initialize_database
 	chmod 777 /tmp/db/InstallFullDB.sh
 	
 	# Set ADMINISTRATOR account to level 4 and lock it down and remove other default accounts
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${REALMD_DB} -e 'UPDATE `account` SET gmlevel = "4", locked = "1" WHERE id = "1" LIMIT 1;'
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${REALMD_DB} -e 'DELETE FROM `account` WHERE id = "2" LIMIT 1;'
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${REALMD_DB} -e 'DELETE FROM `account` WHERE id = "3" LIMIT 1;'
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${REALMD_DB} -e 'DELETE FROM `account` WHERE id = "4" LIMIT 1;'
-	
-	# Create main account
-	mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${REALMD_DB} -e 'INSERT INTO `account` VALUES (1, "${ACCOUNT_USERNAME}", 3, "", "312B99EEF1C0196BB73B79D114CE161C5D089319E6EF54FAA6117DAB8B672C14", "8EB5DE915AA3D805FA7099CF61C0BB8A77990EA869078A0C5B9EEE55828F4505", "", "2006-04-25 10:18:56", "0.0.0.0", 0, 0, "1970-01-01 00:00:01", 0, 0, 0, "", NULL);'
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${REALMD_DB} -e 'UPDATE `account` SET gmlevel = "4", locked = "1" WHERE id = "1" LIMIT 1;'
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${REALMD_DB} -e 'DELETE FROM `account` WHERE id = "2" LIMIT 1;'
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${REALMD_DB} -e 'DELETE FROM `account` WHERE id = "3" LIMIT 1;'
+	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${REALMD_DB} -e 'DELETE FROM `account` WHERE id = "4" LIMIT 1;'
 	
 	# Run install script
 	cd /tmp/db
@@ -218,7 +215,7 @@ function initialize_database
 		for UPDATEFILE in /opt/cmangos/sql/custom/characters/*.sql; do
 			if [ -e "$UPDATEFILE" ]; then
 				echo "$UPDATEFILE..."
-				mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${CHARACTERS_DB} < ${UPDATEFILE}
+				mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${CHARACTERS_DB} < ${UPDATEFILE}
 			fi
 		done
 		
@@ -226,7 +223,7 @@ function initialize_database
 		for UPDATEFILE in /opt/cmangos/sql/custom/realmd/*.sql; do
 			if [ -e "$UPDATEFILE" ]; then
 				echo "$UPDATEFILE..."
-				mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${REALMD_DB} < ${UPDATEFILE}
+				mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${REALMD_DB} < ${UPDATEFILE}
 			fi
 		done
 		
@@ -234,7 +231,7 @@ function initialize_database
 		for UPDATEFILE in /opt/cmangos/sql/custom/world/*.sql; do
 			if [ -e "$UPDATEFILE" ]; then
 				echo "$UPDATEFILE..."
-				mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${MANGOSD_DB} < ${UPDATEFILE}
+				mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${MANGOSD_DB} < ${UPDATEFILE}
 			fi
 		done
 		
@@ -242,7 +239,7 @@ function initialize_database
 		for UPDATEFILE in /opt/cmangos/sql/custom/playerbots/*.sql; do
 			if [ -e "$UPDATEFILE" ]; then
 				echo "$UPDATEFILE..."
-				mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${PLAYERBOTS_DB} < ${UPDATEFILE}
+				mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${PLAYERBOTS_DB} < ${UPDATEFILE}
 			fi
 		done
 	
@@ -330,7 +327,7 @@ function reset_randombots
 	# Check if already set to reset bots
 	if [ -f "/opt/cmangos/etc/.reset_randombots" ]; then
 		rm -rf /opt/cmangos/etc/.reset_randombots
-		mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${PLAYERBOTS_DB} < /opt/cmangos/sql/reset_randombots.sql
+		mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${PLAYERBOTS_DB} < /opt/cmangos/sql/reset_randombots.sql
 		echo "Bots will be scheduled to be reset on server restart"
 	fi
 	
@@ -342,7 +339,7 @@ function delete_randombots
 	# Check if already set to delete bots (not in player friends list or guild)
 	if [ -f "/opt/cmangos/etc/.delete_randombots" ]; then
 		rm -rf /opt/cmangos/etc/.delete_randombots
-		mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${PLAYERBOTS_DB} < /opt/cmangos/sql/delete_randombots.sql
+		mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${PLAYERBOTS_DB} < /opt/cmangos/sql/delete_randombots.sql
 		echo "Bots will be scheduled to be deleted on server restart"
 	fi
 	
@@ -354,7 +351,7 @@ function delete_all_randombots
 	# Check if already set to reset bots
 	if [ -f "/opt/cmangos/etc/.delete_all_randombots" ]; then
 		rm -rf /opt/cmangos/etc/.delete_all_randombots
-		mysql -h "$DB_SERVER" -P "$DB_PORT" -uroot -p${DB_PASS} ${PLAYERBOTS_DB} < /opt/cmangos/sql/delete_all_randombots.sql
+		mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -u${DB_ROOT_PASS} ${PLAYERBOTS_DB} < /opt/cmangos/sql/delete_all_randombots.sql
 		echo "Bots will be scheduled to be deleted on server shutdown"
 	fi
 	

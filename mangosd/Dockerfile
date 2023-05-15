@@ -133,8 +133,8 @@ ENV TZ=Europe/Amsterdam \
     DB_PASS=mangos \
 	DB_PORT=3306 \
     DB_SERVER=database \
-	ACCOUNT_USERNAME=account \
-	ACCOUNT_PASSWORD=administrator
+	DB_ROOT_USER=root \
+	DB_ROOT_PASS=mangos
 
 # Copy over init scripts and make them executable
 COPY scripts/mangosd.sh /opt/cmangos/scripts/mangosd.sh
