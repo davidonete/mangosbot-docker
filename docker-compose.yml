@@ -55,13 +55,12 @@ services:
             - MANGOSD_DB=classicmangos
             - REALMD_DB=classicrealmd
             - PLAYERBOTS_DB=classicplayerbots
+            - DB_SERVER=database
+            - DB_ROOT_USER=root
+            - DB_ROOT_PASS=mangos
+            - DB_PORT=3306
             - DB_USER=mangos
             - DB_PASS=mangos
-            - DB_PORT=3306
-            - REALMD_USER=mangos
-            - REALMD_PASS=mangos
-            - DB_SERVER=database
-            - REALMD_SERVER=database
         security_opt:
           - seccomp:unconfined
         cap_add:
