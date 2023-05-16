@@ -278,6 +278,7 @@ function initialize
 
 		# Move binaries to correct folder
 		if [ -d "/opt/cmangos/bin2" ]; then
+			rm -rf /opt/cmangos/bin/*
 			mv -f /opt/cmangos/bin2/* /opt/cmangos/bin
 			rm -rf /opt/cmangos/bin2
 		fi
