@@ -8,6 +8,14 @@ You will need to generate or download the vmaps, mmaps, etc...  and place it in 
 
 https://mega.nz/folder/mRk3DCoZ#2nkNx9NlayG0Lj9Un8dsYA
 
+## Set up Mysql variables
+On this repository we have two versions (branches) of the docker container depending if you want to include a Mysql container or not. If you do you just need to use the main branch and leave the default values, but if you don't you should use the 'without-db' branch and modify some files to allow the container to connect to your mysql server.
+
+The files you need to modify are:
+- docker-compose.yml: The following variables need to change DB_SERVER, DB_PORT, DB_ROOT_USER, DB_ROOT_PASS
+- mangosd.conf and realmd.conf: The following variables need to change LoginDatabaseInfo, WorldDatabaseInfo, CharacterDatabaseInfo, LogsDatabaseInfo, PlayerbotDatabaseInfo
+- InstallFullDB.config: The following variables need to change MYSQL_HOST, MYSQL_PORT, MYSQL_USERNAME, MYSQL_PASSWORD
+
 ## Custom sql
 You can place all your custom sql on the sql/custom folder and it will get executed at the initialization state in alphabetical order. Keep in mind it needs to be placed into the world/realms/playerbots folder depending on what the sql is editing
 
@@ -22,8 +30,8 @@ To stop the container without issues you should stop the mangosd container first
 
 You can edit the timeout for the docker compose to stop in the docker-compose.yml file changing the stop_grace_period, in case your container gets stuck
 
-# Reinstall the container
-To make a fresh install of the container you should remove the ".initialized" file in the config file and remove all the containers from docker. After that you can do the "docker-compose up -d" to restart it
+# Reinstall/Update the container
+To make a fresh install or update of the container you should remove the ".initialized" file in the config file and remove all the relevant containers and volumes from docker. After that you can do the "docker-compose up -d" to restart it
 
 # How to use the mangosd command window
 As docker doesn't allow direct input on the containers, there are two workarounds for sending commands to the mangosd service:
