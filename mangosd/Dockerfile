@@ -68,9 +68,13 @@ RUN mkdir -p /opt/src && \
 # Build Software
 RUN mkdir -p /opt/cmangos/logs /opt/src/cmangos/build && \
 	cd /opt/src/cmangos/build && \
-	#cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/cmangos -DBUILD_LOGIN_SERVER=OFF -DBUILD_GAME_SERVER=ON -DBUILD_ACHIEVEMENTS=ON -DBUILD_AHBOT=ON -DBUILD_GIT_ID=OFF -DBUILD_IKE3_BOTS=ON -DBUILD_PLAYERBOT=ON -DBUILD_SCRIPTDEV=ON -DPCH=ON && \
-	cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/opt/cmangos -DBUILD_LOGIN_SERVER=OFF -DBUILD_GAME_SERVER=ON -DBUILD_ACHIEVEMENTS=ON -DBUILD_AHBOT=ON -DBUILD_GIT_ID=OFF -DBUILD_IKE3_BOTS=ON -DBUILD_PLAYERBOT=ON -DBUILD_SCRIPTDEV=ON -DPCH=ON && \
-	make -j 2 && make install
+    # Release build
+	#cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-Wno-switch -Wno-format -Wno-format-security -Wno-format-extra-args -Wno-unused-value" -DCMAKE_CXX_FLAGS="-Wno-switch -Wno-format -Wno-format-security -Wno-format-extra-args -Wno-unused-value" -DCMAKE_INSTALL_PREFIX=/opt/cmangos -DBUILD_LOGIN_SERVER=OFF -DBUILD_GAME_SERVER=ON -DBUILD_ACHIEVEMENTS=ON -DBUILD_AHBOT=ON -DBUILD_GIT_ID=OFF -DBUILD_IKE3_BOTS=ON -DBUILD_PLAYERBOT=ON -DBUILD_SCRIPTDEV=ON -DPCH=ON && \
+	# Release with Debug info build
+    #cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_FLAGS="-Wno-switch -Wno-format -Wno-format-security -Wno-format-extra-args -Wno-unused-value" -DCMAKE_CXX_FLAGS="-Wno-switch -Wno-format -Wno-format-security -Wno-format-extra-args -Wno-unused-value" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_INSTALL_PREFIX=/opt/cmangos -DBUILD_LOGIN_SERVER=OFF -DBUILD_GAME_SERVER=ON -DBUILD_ACHIEVEMENTS=ON -DBUILD_AHBOT=ON -DBUILD_GIT_ID=OFF -DBUILD_IKE3_BOTS=ON -DBUILD_PLAYERBOT=ON -DBUILD_SCRIPTDEV=ON -DPCH=ON && \
+	# Memory leak debugger build
+    cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_FLAGS="-fsanitize=address -fsanitize=leak -O0 -g -Wno-switch -Wno-format -Wno-format-security -Wno-format-extra-args -Wno-unused-value" -DCMAKE_CXX_FLAGS="-fsanitize=address -fsanitize=leak -O0 -g -Wno-switch -Wno-format -Wno-format-security -Wno-format-extra-args -Wno-unused-value" -DCMAKE_LINKER_FLAGS="-fsanitize=address -fsanitize=leak" -DCMAKE_MODULE_LINKER_FLAGS="-fsanitize=address -fsanitize=leak" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_INSTALL_PREFIX=/opt/cmangos -DBUILD_LOGIN_SERVER=OFF -DBUILD_GAME_SERVER=ON -DBUILD_ACHIEVEMENTS=ON -DBUILD_AHBOT=ON -DBUILD_GIT_ID=OFF -DBUILD_IKE3_BOTS=ON -DBUILD_PLAYERBOT=ON -DBUILD_SCRIPTDEV=ON -DPCH=ON && \
+    make -j$(nproc) && make install
 
 # Download base image ubuntu
 FROM ubuntu:20.04

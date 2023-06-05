@@ -86,8 +86,10 @@ function restore_backup_characters_db
 		mysql -h "$DB_SERVER" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" "$CHARACTERS_DB" < "$NEWEST_BACKUP"
 		if [[ $? -eq 0 ]]; then
 			echo "Backup restored successfully from: $NEWEST_BACKUP"
+			return 0
 		else
 			echo "Backup restore failed."
+			return 1
 		fi
 	fi
 	
@@ -108,8 +110,10 @@ function restore_backup_realmd_db
 		mysql -h "$DB_SERVER" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" "$REALMD_DB" < "$NEWEST_BACKUP"
 		if [[ $? -eq 0 ]]; then
 			echo "Backup restored successfully from: $NEWEST_BACKUP"
+			return 0
 		else
 			echo "Backup restore failed."
+			return 1
 		fi
 	fi
 	
@@ -130,8 +134,10 @@ function restore_backup_playerbots_db
 		mysql -h "$DB_SERVER" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASS" "$PLAYERBOTS_DB" < "$NEWEST_BACKUP"
 		if [[ $? -eq 0 ]]; then
 			echo "Backup restored successfully from: $NEWEST_BACKUP"
+			return 0
 		else
 			echo "Backup restore failed."
+			return 1
 		fi
 	fi
 	
@@ -266,9 +272,19 @@ function initialize_database
 
 function initialize 
 {
-	# Check if already initialized
-	if [ -f "/opt/cmangos/etc/.intialized" ]; then
+    # Move new binaries to correct folder
+	if [ -d "/opt/cmangos/bin2" ]; then
+		rm -rf /opt/cmangos/bin/warden_modules
+		mv -f /opt/cmangos/bin2/* /opt/cmangos/bin
+		rm -rf /opt/cmangos/bin2
+	fi
 	
+	if [ -f "/opt/cmangos/etc/.manual_stop" ]; then
+		rm -rf /opt/cmangos/etc/.manual_stop
+	fi
+    
+	# Check if already initialized
+	if [ -f "/opt/cmangos/etc/.initialized" ]; then
 		# TODO Check for updates
 		# ...
 		
@@ -276,19 +292,12 @@ function initialize
 	else
 	    echo "Initializing mangosd server...";
 
-		# Move binaries to correct folder
-		if [ -d "/opt/cmangos/bin2" ]; then
-			rm -rf /opt/cmangos/bin/*
-			mv -f /opt/cmangos/bin2/* /opt/cmangos/bin
-			rm -rf /opt/cmangos/bin2
-		fi
-
 		if ! initialize_database; then
 			return 1
 		fi
 
 	    # Create .initialized file
-	    touch /opt/cmangos/etc/.intialized
+	    touch /opt/cmangos/etc/.initialized
 
 	    return 0
 	fi
@@ -392,6 +401,22 @@ function schedule_delete_all_randombots
 	return 0
 }
 
+function schedule_stop
+{
+	# Check if already requested to stop
+	if [ ! -f "/opt/cmangos/etc/.manual_stop" ]; then
+		# Create .manual_stop file
+		touch /opt/cmangos/etc/.manual_stop
+		echo "Sending shutdown request..."
+		command "server shutdown 300"
+		command "saveall"
+		return 0
+	fi
+	
+	echo "Server already scheduled to shutdown"
+	return 1
+}
+
 function stop
 {
 	PROCESS_PID=$(get_process_pid)
@@ -401,16 +426,23 @@ function stop
 		echo "Stoping mangosd server..."
 		if kill -0 $PROCESS_PID 2>/dev/null; then
 		
-			STOPING_PROCESS=1
-			echo "Sending shutdown request..."
-			command "server shutdown 1"
-			#echo "server shutdown 1" >&3
+			# Check if already requested to stop
+			if [ ! -f "/opt/cmangos/etc/.manual_stop" ]; then
+				# Create .manual_stop file
+				touch /opt/cmangos/etc/.manual_stop
+				
+				STOPING_PROCESS=1
+				echo "Sending shutdown request..."
+				command "saveall"
+				command "server shutdown 1"
+				#echo "server shutdown 1" >&3
+			fi
 			
 			# Close the input pipe
 			exec 3>&-
 			
-			while [ -e /proc/$PROCESS_PID ]; do sleep 1; done
-			echo "Mangosd server stoped"
+			while [ -e /proc/$PROCESS_PID ]; do sleep 5; done
+			echo "Mangosd server stopped"
 			
 			reset_randombots
 			delete_randombots
@@ -428,6 +460,8 @@ function stop
 			if ! backup_playerbots_db; then
 				exit 1;
 			fi
+			
+			return 0
 		else
 			echo "The mangosd server was already stopped"
 		fi
@@ -435,6 +469,22 @@ function stop
 		echo "The mangosd server is not running"
 		return 1
 	fi
+}
+
+function interrupt
+{
+	echo "Mangosd server interrupted"
+	exec 3>&-
+	
+	crash_log_dir="/opt/cmangos/logs/crash"
+	timestamp=$(date +"%Y%m%d%H%M%S")
+	filename="crashdump-${timestamp}.txt"
+	
+	source_file="/opt/cmangos/bin/gdb.txt"
+	destination_file="${crash_log_dir}/${filename}"
+	
+	echo "Creating crash dump file in ${destination_file}"
+	mv "$source_file" "${destination_file}"
 }
 
 function start 
@@ -491,9 +541,8 @@ function start
 			# Loop indefinitely until the process is stopped or interrupted
 			while true; do
 				if ! ps -p "$PROCESS_PID" > /dev/null; then
-					if [ "$STOPING_PROCESS" -eq 0 ]; then
-						echo "Mangosd server interrupted"
-						exec 3>&-
+					if [[ $STOPING_PROCESS -eq 0 && ! -f "/opt/cmangos/etc/.manual_stop" ]]; then
+						interrupt
 						return 1
 					else
 						echo "Mangosd server stoped gracefully"
@@ -524,7 +573,7 @@ case $action in
 		exit 1
         ;;
     "stop")
-        if stop; then
+        if schedule_stop; then
 			exit 0
 		fi
 		

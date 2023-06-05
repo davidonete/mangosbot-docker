@@ -15,17 +15,17 @@ function initialize
 
 function start 
 {
-	if [ ! -f "/opt/cmangos/etc/.intialized" ]; then
-		echo "Waiting for realmd server to initialize..."
+	if [ ! -f "/opt/cmangos/etc/.initialized" ]; then
+		echo "Waiting for mangosd server to initialize..."
 		
 		ELAPSED_TIME=0
-		while [ ! -f "/opt/cmangos/etc/.intialized" ] && [ "$ELAPSED_TIME" -lt 900 ]; do
+		while [ ! -f "/opt/cmangos/etc/.initialized" ] && [ "$ELAPSED_TIME" -lt 900 ]; do
 			sleep 5
 			ELAPSED_TIME=$((ELAPSED_TIME + 5))
 		done
 	fi
 	
-	if [ -f "/opt/cmangos/etc/.intialized" ]; then
+	if [ -f "/opt/cmangos/etc/.initialized" ]; then
 		echo "Realmd server initialized"
 		
 		echo "Starting realmd server...";
