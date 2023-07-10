@@ -64,7 +64,7 @@ RUN mkdir -p /opt/src && \
 RUN mkdir -p /opt/cmangos/logs /opt/src/cmangos/build && \
     cd /opt/src/cmangos/build && \
     cmake .. -DCMAKE_INSTALL_PREFIX=/opt/cmangos -DBUILD_LOGIN_SERVER=ON -DBUILD_GAME_SERVER=OFF && \
-    make -j 4 && make install
+    make -j$(nproc) && make install
 
 # Extract runtime files and cleanup
 RUN rm -rfv /opt/src

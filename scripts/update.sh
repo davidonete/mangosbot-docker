@@ -4,8 +4,8 @@ script_path=$(dirname "$0")
 cd "$script_path"
 cd ..
 
-mangosd_container="mangosbot_mangosd_1"
-realmd_container="mangosbot_realmd_1"
+mangosd_container="mangosbot-mangosd"
+realmd_container="mangosbot-realmd"
 
 # Stop mangosd container and wait for it to finish
 echo "Stopping ${mangosd_container}..."
@@ -27,6 +27,9 @@ docker rm "$realmd_container"
 
 # Remove the initialized flag
 rm -rf config/.initialized
+
+# Stop the script execution if errors happen
+set -e
 
 echo "Rebuilding containers..."
 docker-compose build --no-cache

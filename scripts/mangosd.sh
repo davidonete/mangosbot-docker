@@ -165,6 +165,8 @@ function initialize_database
 	mysql -h "$DB_SERVER" -P "$DB_PORT" -u${DB_ROOT_USER} -p${DB_ROOT_PASS} -e "grant all privileges on ${PLAYERBOTS_DB}.* to '${DB_USER}'@'%';"
 	
 	# Get latest version
+	rm -rf /tmp/cmangos
+	rm -rf /tmp/db
 	echo "Getting latest cmangos core from https://github.com/celguar/mangos-classic.git --branch ike3-bots..."
 	git clone https://github.com/celguar/mangos-classic.git --branch ike3-bots /tmp/cmangos
 	echo "Getting latest playerbots module from https://github.com/celguar/mangosbot-bots.git..."
@@ -608,6 +610,21 @@ case $action in
         ;;
     "delete-all-randombots")
         if schedule_delete_all_randombots; then
+			exit 0
+		fi
+		
+		exit 1
+        ;;
+    "backup")
+        if backup_characters_db; then
+			exit 0
+		fi
+		
+		if backup_realmd_db; then
+			exit 0
+		fi
+		
+		if backup_playerbots_db; then
 			exit 0
 		fi
 		
