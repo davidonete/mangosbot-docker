@@ -8,6 +8,9 @@ You will need to generate or download the vmaps, mmaps, etc...  and place it in 
 
 https://mega.nz/folder/mRk3DCoZ#2nkNx9NlayG0Lj9Un8dsYA
 
+## Set up permissions
+To ensure the docker containers have permission to run the scripts, open a terminal in the scripts folder and run the following command `chmod -R +x *` which will add execute permission to all the files in the folder.
+
 ## Set up Mysql variables
 On this repository we have two versions (branches) of the docker container depending if you want to include a Mysql container or not. If you do you just need to use the main branch and leave the default values, but if you don't you should use the 'without-db' branch and modify some files to allow the container to connect to your mysql server.
 
